@@ -39,9 +39,12 @@
       "herdr"
       "opencode"
       "cliproxyapi"
+      "bun"
+      "nvm"
+      "gh"
     ];
     casks = [
-      "wezterm"
+      "wezterm@nightly"
       "codex"
       "claude-code"
     ];

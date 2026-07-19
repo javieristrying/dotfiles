@@ -16,6 +16,9 @@ in
     jq        # json on the command line
     lazygit
     neovim
+    # rust toolchain
+    rustc      # compiler
+    cargo      # build tool / package manager
     # the font everything renders in
     nerd-fonts.hack
   ];
@@ -29,6 +32,12 @@ in
     initContent = ''
       bindkey '^f' autosuggest-accept
       source ~/.config/claudex/claudex.zsh
+
+      # nvm is a shell function, not a binary - source it from the brew install
+      export NVM_DIR="$HOME/.nvm"
+      [ -d "$NVM_DIR" ] || mkdir -p "$NVM_DIR"
+      [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+      [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
     '';
     shellAliases = {
       ".." = "cd ..";
@@ -65,6 +74,13 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/claudex";
   home.file.".claude/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.claude/settings.json";
+
+  home.file.".claude/skills".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.skills";
+  home.file.".codex/skills".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.skills";
+  home.file.".agents/skills".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.skills";
 
   home.file.".claude/CLAUDE.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
