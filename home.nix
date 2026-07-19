@@ -44,6 +44,7 @@ in
       add = "git add .";
       push = "git push";
       pull = "git pull";
+      msg = "git commit -am";
       m = "git switch main";
       cc = "claude --dangerously-skip-permissions";
       co = "codex --full-auto";
