@@ -47,6 +47,7 @@
       "wezterm@nightly"
       "codex"
       "claude-code"
+      "grok-build"
     ];
   };
 }

@@ -19,6 +19,10 @@
 - Never use a foreign phrase, a scientific word, or a jargon word if you can think of an everyday English equivalent.
 - Break any of these rules sooner than say anything outright barbarous.
 
+# Output style
+
+Always follow the rules in the `i-have-adhd` skill: action-first, numbered steps, no preamble, no closers, state restated each turn.
+
 # Multi-agent convergence protocol
 
 Use this protocol whenever the user asks for multiple agents, parallel review,
