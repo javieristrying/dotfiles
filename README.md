@@ -72,7 +72,6 @@ Same repo, same `bootstrap.sh`. Homebrew-on-Linux covers the packages. `macos.sh
 | `macos.sh` | macOS `defaults write` |
 | `bootstrap.sh` | One-time setup for a fresh machine |
 | `rebuild.sh` | Re-link, brew bundle with zap, macOS defaults |
-| `uninstall-nix.sh` | One-time: detach Homebrew from Nix, then remove nix-darwin and Determinate. Delete after it succeeds |
 
 ## Agent skills
 
