@@ -1,23 +1,17 @@
 # dotfiles
 
-Declarative macOS setup built on [Determinate Nix](https://determinate.systems/nix),
-[nix-darwin](https://github.com/nix-darwin/nix-darwin), and
-[home-manager](https://github.com/nix-community/home-manager). One command takes a
-fresh Mac to a fully configured machine: system settings, CLI tools, Homebrew
-packages, shell, terminal, editor, and agent skills.
+Home files live in `home/` and get symlinked into `$HOME`. Homebrew installs the packages. No Nix.
 
 ## Setting up a new machine
 
 ### Prerequisites
 
-- Admin account (the install and every rebuild use `sudo`)
-- Xcode Command Line Tools, needed for `git`:
+- Admin account (Homebrew's installer may ask for it)
+- Xcode Command Line Tools, needed for `git` and Homebrew:
 
   ```sh
   xcode-select --install
   ```
-
-Everything else (Nix itself, Homebrew, all packages) is installed by the bootstrap.
 
 ### Install
 
@@ -27,19 +21,17 @@ cd ~/dev/dotfiles
 ./bootstrap.sh
 ```
 
-`bootstrap.sh` does four things:
+`bootstrap.sh` does five things:
 
-1. Installs Determinate Nix (skipped if `nix` is already present)
-2. Symlinks the repo to `~/.dotfiles` (config paths resolve through this)
-3. Rewrites the `user = "..."` line in `flake.nix` to your macOS username, with confirmation
-4. Runs the first `darwin-rebuild switch`
+1. Installs Homebrew (skipped if `brew` is already present)
+2. Installs rustup (skipped if `~/.cargo/bin/rustup` exists)
+3. Symlinks this repo to `~/.dotfiles` and links everything under `home/`
+4. Installs the Brewfile
+5. On macOS, writes system defaults (dark mode, key repeat, dock, finder, tap to click)
 
-Open a new terminal when it finishes so the Nix-managed shell loads.
+Open a new terminal when it finishes.
 
-On an Intel Mac, change `nixpkgs.hostPlatform` in `configuration.nix` to
-`"x86_64-darwin"` before running the bootstrap.
-
-### After the first switch
+### After the first run
 
 A few things are account-bound and stay manual:
 
@@ -49,43 +41,46 @@ A few things are account-bound and stay manual:
 
 ## Day-to-day changes
 
-Edit the config, then apply it:
+Edit the file under `home/`. It is already the live file via symlink. No rebuild.
+
+To add or remove a package, edit `Brewfile`, then:
 
 ```sh
 ./rebuild.sh
 ```
 
-Homebrew runs with `cleanup = "zap"`: anything installed by hand and not listed
-in `configuration.nix` gets removed on the next rebuild. To keep a package, add
-it to `brews` or `casks`.
+`rebuild.sh` runs `brew bundle --force-cleanup --zap`: anything installed by hand and not listed in `Brewfile` gets removed. To keep a package, add it to the Brewfile.
+
+To change macOS defaults, edit `macos.sh` and run `./rebuild.sh` (or `./macos.sh` directly).
+
+## Linux
+
+Same repo, same `bootstrap.sh`. Homebrew-on-Linux covers the packages. `macos.sh` is skipped. To use zsh as your login shell afterwards: `chsh -s $(command -v zsh)`.
 
 ## Layout
 
 | Path | Purpose |
 |---|---|
-| `flake.nix` | Inputs, the `user` name, and the `mac` host definition |
-| `configuration.nix` | System level: macOS defaults, Homebrew packages and casks |
-| `home.nix` | User level: CLI packages, zsh, starship, and all symlinks into `$HOME` |
 | `home/` | The actual config files the symlinks point at |
+| `home/.zshrc` | Shell: aliases, nvm, plugins, starship |
+| `home/.zshenv` | `EDITOR`, Homebrew, rustup - loaded for every zsh |
+| `home/.config/` | wezterm, ghostty, nvim, herdr, claudex, starship |
 | `home/AGENTS.md` | Shared agent instructions, linked to Claude, Codex, and opencode |
 | `home/.skills/` | Agent skills, one folder per skill with a `SKILL.md` |
+| `Brewfile` | Homebrew formulae, casks, fonts |
+| `link.sh` | Creates the `~/.dotfiles` symlink and every home link |
+| `macos.sh` | macOS `defaults write` |
 | `bootstrap.sh` | One-time setup for a fresh machine |
-| `rebuild.sh` | Applies the current config |
-
-Config symlinks use `mkOutOfStoreSymlink`, so edits to files under `home/`
-apply immediately - no rebuild needed. A rebuild is only needed when `.nix`
-files change.
+| `rebuild.sh` | Re-link, brew bundle with zap, macOS defaults |
+| `uninstall-nix.sh` | One-time: detach Homebrew from Nix, then remove nix-darwin and Determinate. Delete after it succeeds |
 
 ## Agent skills
 
-`home/.skills/` is the single store for skills. home-manager links it to every
-place agents look:
+`home/.skills/` is the single store for skills. `link.sh` links it to every place agents look:
 
 - `~/.claude/skills` (Claude Code)
 - `~/.codex/skills` (Codex)
 - `~/.agents/skills` (shared store used by skill installers)
 
 To add a skill, drop a `<name>/SKILL.md` folder into `home/.skills/` and commit.
-When installing from a skill repo, copy the inner skill folder out of it rather
-than cloning the whole repo in. `home/.skills/.system/` belongs to Codex and is
-gitignored.
+When installing from a skill repo, copy the inner skill folder out of it rather than cloning the whole repo in. `home/.skills/.system/` belongs to Codex and is gitignored.

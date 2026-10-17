@@ -1,0 +1,12 @@
+theme = Rose Pine Moon
+font-family = CaskaydiaMono Nerd Font
+font-size = 14
+
+background-opacity = 0.8
+background-blur = 80
+
+window-padding-x = 8
+window-padding-y = 8
+
+macos-titlebar-style = tabs
+macos-window-buttons = hidden
