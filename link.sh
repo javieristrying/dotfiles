@@ -13,6 +13,13 @@ link() {
     echo "refusing to replace directory: $dest" >&2
     exit 1
   fi
+  # Apps like Claude Code replace the link with a real file when they save.
+  # Never drop those edits: stop unless the file matches the repo copy.
+  if [[ -f "$dest" && ! -L "$dest" ]] && ! cmp -s "$src" "$dest"; then
+    echo "refusing to replace file that differs from the repo: $dest" >&2
+    echo "  copy it into the repo to keep it: cp '$dest' '$src'" >&2
+    exit 1
+  fi
   ln -sfn "$src" "$dest"
   echo "  $dest -> $src"
 }
@@ -30,7 +37,6 @@ link "$DOT/.config/ghostty" "$HOME/.config/ghostty"
 link "$DOT/.claude/settings.json" "$HOME/.claude/settings.json"
 link "$DOT/.skills" "$HOME/.claude/skills"
 link "$DOT/.skills" "$HOME/.codex/skills"
-link "$DOT/.skills" "$HOME/.agents/skills"
 link "$DOT/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 link "$DOT/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link "$DOT/AGENTS.md" "$HOME/.config/opencode/AGENTS.md"
