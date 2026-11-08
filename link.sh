@@ -37,6 +37,9 @@ link "$DOT/.config/ghostty" "$HOME/.config/ghostty"
 link "$DOT/.claude/settings.json" "$HOME/.claude/settings.json"
 link "$DOT/.skills" "$HOME/.claude/skills"
 link "$DOT/.skills" "$HOME/.codex/skills"
+# Skill installers (`skills add -g`) write here. Pointing it at the same store
+# makes them save real folders in the repo instead of links that break.
+link "$DOT/.skills" "$HOME/.agents/skills"
 link "$DOT/AGENTS.md" "$HOME/.claude/CLAUDE.md"
 link "$DOT/AGENTS.md" "$HOME/.codex/AGENTS.md"
 link "$DOT/AGENTS.md" "$HOME/.config/opencode/AGENTS.md"

@@ -79,8 +79,9 @@ Same repo, same `bootstrap.sh`. Homebrew-on-Linux covers the packages. `macos.sh
 
 - `~/.claude/skills` (Claude Code)
 - `~/.codex/skills` (Codex)
+- `~/.agents/skills` (where skill installers like `skills add -g` write)
 
 To add a skill, drop a `<name>/SKILL.md` folder into `home/.skills/` and commit.
 When installing from a skill repo, copy the inner skill folder out of it rather than cloning the whole repo in. `home/.skills/.system/` belongs to Codex and is gitignored.
 
-Skill installers keep their own copies in `~/.agents/skills` and link them into `home/.skills/`. Those links break in a fresh clone, so replace each with a real folder before committing: `cp -R "$(readlink <name>)/" <name>` after removing the link.
+Because `~/.agents/skills` is the same folder, `skills add -g` saves real folders straight into `home/.skills/`, ready to commit. If `link.sh` refuses `~/.agents/skills` because an installer made it a real folder first, move that folder's skills into `home/.skills/`, delete it, and re-run `link.sh`.
