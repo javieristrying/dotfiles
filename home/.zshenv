@@ -15,4 +15,4 @@ fi
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
 # Vite+ bin (https://viteplus.dev)
-. "/Users/javier/.config/vite-plus/env"
+[[ -f "$HOME/.config/vite-plus/env" ]] && . "$HOME/.config/vite-plus/env"

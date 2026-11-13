@@ -56,7 +56,7 @@ fi
 # <<<< END MANAGED DEVIN BLOCK <<<<
 
 # Vite+ bin (https://viteplus.dev)
-. "/Users/javier/.config/vite-plus/env"
+[[ -f "$HOME/.config/vite-plus/env" ]] && . "$HOME/.config/vite-plus/env"
 
 # Added by Devin
 export PATH="/Users/javier/.codeium/windsurf/bin:$PATH"
